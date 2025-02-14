@@ -1,0 +1,32 @@
+[package]
+name = "apimimic"
+version = "0.1.0"
+
+authors = ["nabbisen <nabbisen@scqr.net>"]
+license = "Apache-2.0"
+edition = "2021"
+
+description = "Mimic to handle API mock Server generating HTTP/JSON responses written in Rust"
+repository = "https://github.com/nabbisen/apimock-rs"
+readme = "README.md"
+categories = ["web-programming", "development-tools", "command-line-utilities"]
+keywords = ["https", "api", "mock", "testing"]
+rust-version = "1.78.0"
+
+[profile.release]     # shrink executable size
+opt-level = "z"
+lto = true
+panic = "abort"
+strip = true
+codegen-units = 1
+
+[profile.dev]         # reasonably improve productivity
+opt-level = 1         # slightly optimize
+lto = false           # disable link-time optimizations
+# strip = "debuginfo" # reduce size
+incremental = true
+
+[dependencies]
+apimock = { version = "^2.7", features = ["spawn"] }
+fltk = { version = "1.5.3", features = ["fltk-bundled"] }
+tokio = "1.43.0"
