@@ -1,16 +1,16 @@
 [package]
 name = "apimimic"
 version = "0.1.0"
-
-authors = ["nabbisen <nabbisen@scqr.net>"]
-license = "Apache-2.0"
 edition = "2021"
 
-description = "Mimic to handle API mock Server generating HTTP/JSON responses written in Rust"
-repository = "https://github.com/nabbisen/apimock-rs"
-readme = "README.md"
+description = "Mimic to handle API mock Server generating HTTP/JSON responses"
+authors = ["nabbisen <nabbisen@scqr.net>"]
+license = "Apache-2.0"
+
 categories = ["web-programming", "development-tools", "command-line-utilities"]
 keywords = ["https", "api", "mock", "testing"]
+repository = "https://github.com/nabbisen/apimimic"
+readme = "README.md"
 rust-version = "1.78.0"
 
 [profile.release]     # shrink executable size
