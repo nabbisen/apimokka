@@ -11,7 +11,7 @@ use fltk::{
     window::Window,
 };
 
-use apimock::{core::config::config_path, server};
+use apimock::server;
 use tokio::sync::mpsc::channel;
 
 mod app;
@@ -35,6 +35,8 @@ const LINE_NUMBER_WIDTH: i32 = 14;
 
 #[tokio::main]
 async fn main() {
+    let config_filepath = "./tests/fixtures/apimock.toml";
+
     // connector
     let (server_tx, mut server_rx) = channel::<String>(255);
     let (shutdown_tx, mut shutdown_rx) = channel::<()>(1);
@@ -65,13 +67,12 @@ async fn main() {
     col.set_pad(10);
     col.set_margin(10);
 
-    let filepath = "./tests/fixtures/apimock.toml";
     let mut filepath_output = Output::default();
     filepath_output
-        .append(filepath)
+        .append(config_filepath)
         .expect("Failed to show file path");
 
-    let mut file = std::fs::File::open(filepath).expect("Failed to open config file");
+    let mut file = std::fs::File::open(config_filepath).expect("Failed to open config file");
     let mut read_buffer = String::new();
     let _ = file
         .read_to_string(&mut read_buffer)
@@ -109,7 +110,7 @@ async fn main() {
 
     // server process
     let handle = tokio::spawn(async move {
-        let apimock = server(config_path().as_str(), server_tx, false).await;
+        let apimock = server(config_filepath, server_tx, false).await;
         let _ = apimock.start().await;
     });
 
