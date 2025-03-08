@@ -27,6 +27,6 @@ lto = false           # disable link-time optimizations
 incremental = true
 
 [dependencies]
-apimock = { version = "^2.7", features = ["spawn"] }
-fltk = { version = "1.5.3", features = ["fltk-bundled"] }
-tokio = "1.43.0"
+apimock = { version = "2", features = ["spawn"] }
+fltk = { version = "1", features = ["fltk-bundled"] }
+tokio = "1"
