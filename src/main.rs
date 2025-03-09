@@ -7,7 +7,8 @@ use fltk::{
     group::*,
     output::Output,
     prelude::*,
-    text::{TextBuffer, TextDisplay, TextEditor},
+    terminal::Terminal,
+    text::{TextBuffer, TextEditor},
     window::Window,
 };
 
@@ -18,11 +19,10 @@ mod app;
 mod core;
 
 // consts
-const INPUT_OUTPUT_WIDTH: i32 = 360;
-const INPUT_HEIGHT: i32 = 120;
-const OUTPUT_HEIGHT: i32 = 40;
+const CONTAINER_WIDTH: i32 = 630;
+const CONTAINER_HEIGHT: i32 = 440;
 const BUTTON_HEIGHT: i32 = 30;
-const LINE_NUMBER_WIDTH: i32 = 14;
+// const LINE_NUMBER_WIDTH: i32 = 14;
 // const STYLE_TABLE: [StyleTableEntryExt; 3] = [
 //     StyleTableEntryExt {
 //         color: Color::from_hex(0x000000),
@@ -45,27 +45,35 @@ async fn main() {
     let app = App::default().with_scheme(Scheme::Gtk);
 
     let mut window = Window::default()
-        .with_size(
-            INPUT_OUTPUT_WIDTH + 28,
-            INPUT_HEIGHT * 2 + OUTPUT_HEIGHT * 2 + 28,
-        )
+        .with_size(CONTAINER_WIDTH, CONTAINER_HEIGHT)
         .with_label("API mimic");
     window.set_color(Color::White);
 
     let mut tab = Tabs::default_fill();
+
     let grp1 = Flex::default_fill().with_label("Log\t\t").row();
-    let mut log_buffer = TextBuffer::default();
-    let mut text_display = TextDisplay::default_fill();
-    text_display.wrap_mode(fltk::text::WrapMode::AtBounds, 0);
-    text_display.set_buffer(Some(log_buffer.clone()));
-    text_display.set_linenumber_width(LINE_NUMBER_WIDTH);
-    text_display.set_linenumber_size(LINE_NUMBER_WIDTH - 3);
+    // let mut log_buffer = TextBuffer::default();
+    // let mut text_display = TextDisplay::default_fill();
+    let mut terminal = Terminal::default_fill();
+    terminal.set_ansi(true);
+    // text_display.set_color(Color::Dark3);
+    // text_display.wrap_mode(fltk::text::WrapMode::AtBounds, 0);
+    // text_display.set_linenumber_width(LINE_NUMBER_WIDTH);
+    // text_display.set_linenumber_size(LINE_NUMBER_WIDTH - 3);
+    // text_display.set_buffer(Some(log_buffer.clone()));
     grp1.end();
 
-    let grp2 = Flex::default_fill().with_label("Config\t\t").row();
-    let mut col = Flex::default().column();
-    col.set_pad(10);
-    col.set_margin(10);
+    // let grp2 = Flex::default_fill().with_label("Routing\t\t").row();
+    // let mut routing_buffer = TextBuffer::default();
+    // let mut text_display = TextDisplay::default_fill();
+    // text_display.set_buffer(routing_buffer.clone());
+    // routing_buffer.append("test > test\n".repeat(30).as_str());
+    // grp2.end();
+
+    let grp3 = Flex::default_fill().with_label("Config\t\t").row();
+    let scroll = Scroll::default_fill();
+    let mut vpack = Pack::default_fill();
+    vpack.set_spacing(10);
 
     let mut filepath_output = Output::default();
     filepath_output
@@ -81,15 +89,17 @@ async fn main() {
     let mut config_buffer = TextBuffer::default();
     config_buffer.append(&read_buffer);
     let mut editor = TextEditor::default();
-    editor.set_size(INPUT_OUTPUT_WIDTH, INPUT_HEIGHT);
+    editor.set_size(CONTAINER_WIDTH, CONTAINER_HEIGHT - BUTTON_HEIGHT * 2 - 20);
     editor.set_buffer(Some(config_buffer));
     editor.set_color(Color::from_hex(0xffeecc));
 
-    let mut button = Button::default().with_size(INPUT_OUTPUT_WIDTH, BUTTON_HEIGHT);
+    let mut button = Button::default().with_size(0, BUTTON_HEIGHT);
     button.set_label("stop server");
 
-    col.end();
-    grp2.end();
+    vpack.end();
+    scroll.end();
+    grp3.end();
+
     tab.end();
     tab.auto_layout();
 
@@ -109,8 +119,8 @@ async fn main() {
     });
 
     // server process
-    let handle = tokio::spawn(async move {
-        let apimock = server(config_filepath, server_tx, false).await;
+    let mut handle = tokio::spawn(async move {
+        let apimock = server(config_filepath, server_tx, true).await;
         let _ = apimock.start().await;
     });
 
@@ -118,9 +128,10 @@ async fn main() {
         loop {
             match server_rx.recv().await {
                 Some(message) => {
-                    log_buffer.append(format!("{}\n", message).as_str());
-                    // scroll to bottom
-                    text_display.scroll(log_buffer.text().split("\n").count() as i32, 0);
+                    // log_buffer.append(format!("{}\n", message).as_str());
+                    // // scroll to bottom
+                    // text_display.scroll(log_buffer.text().split("\n").count() as i32, 0);
+                    terminal.append(format!("{}\n", message).as_str());
                 }
                 None => {
                     println!("Receiver closed");
@@ -136,6 +147,11 @@ async fn main() {
                 Some(_) => {
                     println!("Stopping http server");
                     handle.abort();
+
+                    // handle = tokio::spawn(async move {
+                    //     let apimock = server(config_filepath, server_tx, true).await;
+                    //     let _ = apimock.start().await;
+                    // });
                 }
                 None => {
                     println!("Receiver closed");
