@@ -30,3 +30,6 @@ incremental = true
 apimock = { version = "2", features = ["spawn"] }
 fltk = { version = "1", features = ["fltk-bundled"] }
 tokio = "1"
+
+[target.musl.dependencies]
+fltk = { version = "1", default-features = false }
