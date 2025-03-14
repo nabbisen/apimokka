@@ -42,4 +42,4 @@ cargo install apimokka
 
 ## Acknowledgements
 
-Depends on [apimokka](https://github.com/nabbisen/apimokka) and [fltk-rs](https://github.com/fltk-rs/fltk-rs).
+Depends on [apimock-rs](https://github.com/nabbisen/apimock-rs) and [fltk-rs](https://github.com/fltk-rs/fltk-rs).
