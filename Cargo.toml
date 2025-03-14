@@ -1,15 +1,15 @@
 [package]
-name = "apimimic"
+name = "apimokka"
 version = "0.1.0"
 edition = "2021"
 
-description = "Mimic to handle API mock Server generating HTTP/JSON responses"
+description = "Mock with mokka ☕️🌄 Visual mocking helper to handle API mock Server generating HTTP/JSON responses"
 authors = ["nabbisen <nabbisen@scqr.net>"]
 license = "Apache-2.0"
 
 categories = ["web-programming", "development-tools", "command-line-utilities"]
 keywords = ["https", "api", "mock", "testing"]
-repository = "https://github.com/nabbisen/apimimic"
+repository = "https://github.com/nabbisen/apimokka"
 readme = "README.md"
 rust-version = "1.78.0"
 
