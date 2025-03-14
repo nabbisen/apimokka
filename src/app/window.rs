@@ -15,6 +15,7 @@ use super::{
     tabs,
 };
 
+/// entry point
 pub fn handle() -> Window {
     let config_filepath = match config_filepath() {
         Ok(x) => x,
@@ -88,6 +89,7 @@ pub fn handle() -> Window {
     window
 }
 
+/// detect config file
 fn config_filepath<'a>() -> Result<&'a str, String> {
     for x in [DEFAULT_CONFIG_FILEPATH, DEV_CONFIG_FILEPATH] {
         if fs::metadata(x).is_ok_and(|x| x.is_file()) {

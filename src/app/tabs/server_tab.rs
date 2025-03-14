@@ -9,6 +9,7 @@ use fltk::{
 };
 use tokio::sync::{mpsc::Receiver, Mutex};
 
+/// entry point
 pub fn handle(server_proc_tx: Arc<Mutex<Receiver<String>>>) -> Flex {
     let tab = Flex::default_fill().with_label("Server\t\t").row();
 

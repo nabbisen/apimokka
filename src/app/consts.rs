@@ -12,7 +12,9 @@ pub const LABEL_HEIGHT: i32 = 20;
 
 pub const FLEX_SPACING: i32 = 10;
 
+/// config file in production
 pub const DEFAULT_CONFIG_FILEPATH: &str = "./apimock.toml";
+/// config file in development
 pub const DEV_CONFIG_FILEPATH: &str = "./tests/fixtures/apimock.toml";
 
 // const LINE_NUMBER_WIDTH: i32 = 14;

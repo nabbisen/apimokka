@@ -16,6 +16,7 @@ use crate::app::consts::{
     BUTTON_HEIGHT, BUTTON_WIDTH, CONFIG_EDITOR_HEIGHT, CONTAINER_WIDTH, FLEX_SPACING, LABEL_HEIGHT,
 };
 
+/// entry point
 pub fn handle(config_filepath: &str, restart_server_tx: Arc<Mutex<Sender<()>>>) -> Flex {
     let tab = Flex::default_fill().with_label("Config\t\t").row();
     let mut vpack = Pack::default_fill();
@@ -96,6 +97,7 @@ pub fn handle(config_filepath: &str, restart_server_tx: Arc<Mutex<Sender<()>>>) 
     tab
 }
 
+/// get file content
 fn file_content(config_filepath: &str) -> String {
     let mut filepath_output = Output::default();
     filepath_output
