@@ -22,21 +22,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Linux-aarch64-musl
-            target: aarch64-unknown-linux-musl
-            os: ubuntu-latest
-            bin_ext: 
-            archive_ext: .tar.gz
           - name: Linux-x64-gnu
             target: x86_64-unknown-linux-gnu
             os: ubuntu-latest
             bin_ext: 
             archive_ext: .tar.gz
-          # - name: Linux-x64-musl
-          #   target: x86_64-unknown-linux-musl
-          #   os: ubuntu-latest
-          #   bin_ext: 
-          #   archive_ext: .tar.gz
           - name: macOS-aarch64
             target: aarch64-apple-darwin
             os: macos-latest
@@ -51,19 +41,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       # [ fltk build preparation ]
-      - name: Install fltk-rs requirements on x64 gnu Linux
+      - name: Install fltk-rs requirements on Linux
         if: matrix.target == 'x86_64-unknown-linux-gnu'
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libx11-dev libxext-dev libxft-dev libxinerama-dev libxcursor-dev libxrender-dev libxfixes-dev libpango1.0-dev libgl1-mesa-dev libglu1-mesa-dev
-      
-      - name: Install fltk-rs requirements on musl Linux
-        if: matrix.target == 'aarch64-unknown-linux-musl' || matrix.target == 'x86_64-unknown-linux-musl'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends musl-tools musl-dev pkg-config build-essential
+          sudo apt-get install -y libx11-dev libxext-dev libxft-dev libxinerama-dev libxcursor-dev libxrender-dev libxfixes-dev libpango1.0-dev libgl1-mesa-dev libglu1-mesa-dev
       
       # [ build ]
       - name: Install Rust
