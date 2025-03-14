@@ -6,9 +6,7 @@ mod core;
 
 #[tokio::main]
 async fn main() {
-    let config_filepath = "./tests/fixtures/apimock.toml";
-
     let app = App::default().with_scheme(Scheme::Gtk);
-    let _ = window::handle(config_filepath);
+    let _ = window::handle();
     app.run().unwrap();
 }

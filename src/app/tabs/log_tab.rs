@@ -9,17 +9,17 @@ use fltk::{
     terminal::Terminal,
 };
 
-use super::super::consts::{BUTTON_HEIGHT, CONTAINER_HEIGHT, CONTAINER_WIDTH};
+use crate::app::consts::{BUTTON_HEIGHT, CONTAINER_WIDTH, FLEX_SPACING, LOG_TERMINAL_HEIGHT};
 
 pub fn handle() -> Flex {
     let tab = Flex::default_fill().with_label("Log\t\t").row();
     // let mut log_buffer = TextBuffer::default();
     // let mut text_display = TextDisplay::default_fill();
     let mut vpack = Pack::default_fill();
-    vpack.set_spacing(10);
+    vpack.set_spacing(FLEX_SPACING);
 
     let mut terminal = Terminal::default();
-    terminal.set_size(CONTAINER_WIDTH, CONTAINER_HEIGHT - BUTTON_HEIGHT * 3 - 20);
+    terminal.set_size(CONTAINER_WIDTH, LOG_TERMINAL_HEIGHT);
     terminal.set_ansi(true);
     terminal.set_color(Color::Blue);
 

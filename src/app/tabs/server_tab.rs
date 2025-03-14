@@ -9,7 +9,7 @@ use fltk::{
 };
 use tokio::sync::{mpsc::Receiver, Mutex};
 
-pub fn handle(server_rx: Arc<Mutex<Receiver<String>>>) -> Flex {
+pub fn handle(server_proc_tx: Arc<Mutex<Receiver<String>>>) -> Flex {
     let tab = Flex::default_fill().with_label("Server\t\t").row();
 
     let mut terminal = Terminal::default_fill();
@@ -26,7 +26,7 @@ pub fn handle(server_rx: Arc<Mutex<Receiver<String>>>) -> Flex {
     let _ = tokio::spawn(async move {
         loop {
             // todo: how to lock
-            match server_rx.try_lock().unwrap().recv().await {
+            match server_proc_tx.try_lock().unwrap().recv().await {
                 Some(message) => {
                     // log_buffer.append(format!("{}\n", message).as_str());
                     // // scroll to bottom
