@@ -76,7 +76,7 @@ pub fn handle() -> Window {
 
     let mut window = Window::default()
         .with_size(CONTAINER_WIDTH, CONTAINER_HEIGHT)
-        .with_label("API mimic");
+        .with_label("API mokka");
     window.set_color(Color::White);
 
     let _ = tabs::handle(config_filepath, server_proc_rx, restart_server_tx);
