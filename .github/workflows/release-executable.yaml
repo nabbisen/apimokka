@@ -78,10 +78,10 @@ jobs:
           mkdir -p "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}"
           mv "${BUILT_FILEPATH}" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
 
-          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/" https://github.com/nabbisen/apimock-rs/blob/main/examples/config/apimock.toml
+          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock.toml
           mkdir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data"
-          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://github.com/nabbisen/apimock-rs/blob/main/examples/config/apimock-data/api.json5
-          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://github.com/nabbisen/apimock-rs/blob/main/examples/config/apimock-data/home.json
+          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/api.json5
+          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/home.json
           mkdir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-dyn-data"
 
           echo "RELEASE_SRC_DIR=${RELEASE_SRC_DIR}" >> $GITHUB_ENV
