@@ -3,9 +3,9 @@
 Mock with mokka ☕️🌄
 
 [![crates.io](https://img.shields.io/crates/v/apimokka?label=latest)](https://crates.io/crates/apimokka)
-[![Documentation](https://docs.rs/apimokka/badge.svg?version=latest)](https://docs.rs/apimokka/latest)
-[![Dependency Status](https://deps.rs/crate/apimokka/latest/status.svg)](https://deps.rs/crate/apimokka/latest)
-[![Releases Workflow](https://github.com/nabbisen/apimokka/actions/workflows/release-executable.yaml/badge.svg)](https://github.com/nabbisen/apimokka/actions/workflows/)
+[![Documentation](https://docs.rs/apimokka/badge.svg?version=latest)](https://docs.rs/apimokka)
+[![Dependency Status](https://deps.rs/crate/apimokka/latest/status.svg)](https://deps.rs/crate/apimokka)
+[![Releases Workflow](https://github.com/nabbisen/apimokka/actions/workflows/release-executable.yaml/badge.svg)](https://github.com/nabbisen/apimokka/actions/workflows/release-executable.yaml)
 [![License](https://img.shields.io/github/license/nabbisen/apimokka)](https://github.com/nabbisen/apimokka/blob/main/LICENSE)
 
 ## Summary

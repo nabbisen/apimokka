@@ -1,6 +1,6 @@
 [package]
 name = "apimokka"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 
 description = "Mock with mokka ☕️🌄 Visual mocking helper to handle API mock Server generating HTTP/JSON responses"
@@ -29,4 +29,4 @@ incremental = true
 [dependencies]
 apimock = { version = "2", features = ["spawn"] }
 fltk = { version = "1", features = ["fltk-bundled"] }
-tokio = "1"
+tokio = "^1.44"
