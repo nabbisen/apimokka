@@ -3,7 +3,7 @@ use std::process::Command;
 use fltk::{
     button::Button,
     enums::{Color, Event},
-    group::{Flex, Pack},
+    group::{Flex, FlexType},
     input::Input,
     prelude::{GroupExt, InputExt, WidgetBase, WidgetExt},
     terminal::Terminal,
@@ -16,8 +16,9 @@ pub fn handle() -> Flex {
     let tab = Flex::default_fill().with_label("Log\t\t").row();
     // let mut log_buffer = TextBuffer::default();
     // let mut text_display = TextDisplay::default_fill();
-    let mut vpack = Pack::default_fill();
-    vpack.set_spacing(FLEX_SPACING);
+    let mut vflex = Flex::default_fill();
+    vflex.set_spacing(FLEX_SPACING);
+    vflex.set_type(FlexType::Column);
 
     let mut terminal = Terminal::default();
     terminal.set_size(CONTAINER_WIDTH, LOG_TERMINAL_HEIGHT);
@@ -45,40 +46,42 @@ pub fn handle() -> Flex {
     command_line_input.set_size(CONTAINER_WIDTH, BUTTON_HEIGHT);
     let mut command_button = Button::default().with_size(0, BUTTON_HEIGHT);
     command_button.set_label("run command");
-
-    command_button.set_callback(move |_| {
-        let command = command_line_input.clone().value();
-
-        let terminal = terminal.clone();
-        let _ = tokio::spawn(async move {
-            let output = if cfg!(target_os = "windows") {
-                Command::new("cmd")
-                    // utf-8 specified
-                    .args(&["/C", "chcp 65001"])
-                    .output()
-                    .expect("Failed to run chcp command");
-                Command::new("cmd").args(&["/C", &command]).output()
-            } else {
-                Command::new("sh").args(&["-c", &command]).output()
-            }
-            .expect("Failed to run command");
-            let s = format!(
-                "$ {} ->\n{}\n",
-                command,
-                String::from_utf8_lossy(&output.stdout).to_string()
-            );
-            // println!(
-            //     "xxx {:?}",
-            //     String::from_utf8_lossy(&output.stdout).to_string()
-            // );
-            terminal.clone().append(s.as_str());
-        });
-    });
+    command_button.set_callback(move |_| command_button_onclick(&command_line_input, &terminal));
 
     flex.end();
 
-    vpack.end();
+    vflex.fixed(&flex, BUTTON_HEIGHT * 2);
+    vflex.end();
     tab.end();
 
     tab
+}
+
+fn command_button_onclick(command_line_input: &Input, terminal: &Terminal) {
+    let command = command_line_input.clone().value();
+
+    let terminal = terminal.clone();
+    let _ = tokio::spawn(async move {
+        let output = if cfg!(target_os = "windows") {
+            Command::new("cmd")
+                // utf-8 specified
+                .args(&["/C", "chcp 65001"])
+                .output()
+                .expect("Failed to run chcp command");
+            Command::new("cmd").args(&["/C", &command]).output()
+        } else {
+            Command::new("sh").args(&["-c", &command]).output()
+        }
+        .expect("Failed to run command");
+        let s = format!(
+            "$ {} ->\n{}\n",
+            command,
+            String::from_utf8_lossy(&output.stdout).to_string()
+        );
+        // println!(
+        //     "xxx {:?}",
+        //     String::from_utf8_lossy(&output.stdout).to_string()
+        // );
+        terminal.clone().append(s.as_str());
+    });
 }
