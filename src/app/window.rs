@@ -1,4 +1,4 @@
-use std::{fs, sync::Arc};
+use std::{fs, path::Path, sync::Arc};
 
 use fltk::{
     enums::Color,
@@ -27,7 +27,19 @@ pub fn handle() -> Window {
         }
     };
 
-    let middleware_filepath = Some("tests/fixtures/middleware.rhai".to_owned());
+    // todo: get middleware file location and validate it
+    //       temporary values below ?
+    let middleware_filepath_str = (if cfg!(debug_assertions) {
+        "tests/fixtures/middleware.rhai"
+    } else {
+        "middleware.rhai"
+    })
+    .to_owned();
+    let middleware_filepath = if Path::new(middleware_filepath_str.as_str()).exists() {
+        Some(middleware_filepath_str)
+    } else {
+        None
+    };
 
     // server connector
     // - default

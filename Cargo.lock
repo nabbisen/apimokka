@@ -48,9 +48,9 @@ dependencies = [
 
 [[package]]
 name = "apimock"
-version = "3.0.5"
+version = "3.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "375a90226dadf3c8af8782e000d13cbb539f5e088b42c3ea26c1832ab3e1f7b6"
+checksum = "ec61b3cc1e92493fb2ced1697e9f54cb8e208f25037636627a21d188aefeae48"
 dependencies = [
  "console",
  "http-body-util",
@@ -67,7 +67,7 @@ dependencies = [
 
 [[package]]
 name = "apimokka"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
  "apimock",
  "chrono",
