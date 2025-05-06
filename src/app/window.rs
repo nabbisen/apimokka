@@ -8,7 +8,7 @@ use fltk::{
 };
 use tokio::sync::{mpsc::channel, Mutex};
 
-use apimock::core::{app::App, config::ConfigUrlPaths};
+use apimock::{core::config::ConfigUrlPaths, server};
 
 use super::{
     consts::{CONTAINER_HEIGHT, CONTAINER_WIDTH, DEFAULT_CONFIG_FILEPATH, DEV_CONFIG_FILEPATH},
@@ -41,12 +41,11 @@ pub fn handle() -> Window {
     // server process
     let start_server_proc_tx = server_proc_tx.clone();
     let mut handle = tokio::spawn(async move {
-        let server = App::new(
+        let server = server(
             config_filepath,
-            None,
             // todo: middleware
             None,
-            Some(start_server_proc_tx),
+            start_server_proc_tx,
             true,
         )
         .await;
@@ -68,12 +67,11 @@ pub fn handle() -> Window {
                     let restart_server_config_filepath = restart_server_config_filepath.clone();
                     let server_proc_tx = server_proc_tx.clone();
                     handle = tokio::spawn(async move {
-                        let server = App::new(
+                        let server = server(
                             restart_server_config_filepath.as_str(),
-                            None,
                             // todo: middleware
                             None,
-                            Some(server_proc_tx),
+                            server_proc_tx,
                             true,
                         )
                         .await;
