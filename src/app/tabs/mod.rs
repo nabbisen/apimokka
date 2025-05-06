@@ -10,9 +10,9 @@ use tokio::sync::{
     Mutex,
 };
 
+mod client_tab;
 mod config_tab;
 mod config_url_paths_tab;
-mod log_tab;
 mod server_tab;
 
 pub fn handle(
@@ -24,7 +24,7 @@ pub fn handle(
     let mut tabs = Tabs::default_fill();
 
     let _ = server_tab::handle(server_rx);
-    let _ = log_tab::handle();
+    let _ = client_tab::handle();
     let _ = config_tab::handle(config_filepath, restart_server_tx);
     let _ = config_url_paths_tab::handle(config_url_paths);
 

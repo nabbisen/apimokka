@@ -13,7 +13,7 @@ use crate::app::consts::{BUTTON_HEIGHT, CONTAINER_WIDTH, FLEX_SPACING, LOG_TERMI
 
 /// entry point
 pub fn handle() -> Flex {
-    let tab = Flex::default_fill().with_label("Log\t\t").row();
+    let tab = Flex::default_fill().with_label("Client\t\t").row();
     // let mut log_buffer = TextBuffer::default();
     // let mut text_display = TextDisplay::default_fill();
     let mut vflex = Flex::default_fill();
