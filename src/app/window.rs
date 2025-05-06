@@ -8,7 +8,7 @@ use fltk::{
 };
 use tokio::sync::{mpsc::channel, Mutex};
 
-use apimock::server;
+use apimock::core::{app::App, config::ConfigUrlPaths};
 
 use super::{
     consts::{CONTAINER_HEIGHT, CONTAINER_WIDTH, DEFAULT_CONFIG_FILEPATH, DEV_CONFIG_FILEPATH},
@@ -27,23 +27,33 @@ pub fn handle() -> Window {
         }
     };
 
-    // connector
+    // server connector
+    // - default
     let (server_proc_tx, server_proc_rx) = channel::<String>(255);
     let server_proc_rx = Arc::new(Mutex::new(server_proc_rx));
+    // - order to restart
     let (restart_server_tx, mut restart_server_rx) = channel::<()>(1);
     let restart_server_tx = Arc::new(Mutex::new(restart_server_tx));
+    // - shared config url paths
+    let (config_url_paths_tx, config_url_paths_rx) =
+        std::sync::mpsc::channel::<Option<ConfigUrlPaths>>();
 
     // server process
-    let server_start_config_filepath = config_filepath.to_owned();
     let start_server_proc_tx = server_proc_tx.clone();
     let mut handle = tokio::spawn(async move {
-        let apimock = server(
-            server_start_config_filepath.as_str(),
-            start_server_proc_tx,
+        let server = App::new(
+            config_filepath,
+            None,
+            // todo: middleware
+            None,
+            Some(start_server_proc_tx),
             true,
         )
         .await;
-        let _ = apimock.start().await;
+
+        let _ = config_url_paths_tx.send(server.config_url_paths());
+
+        let _ = server.start().await;
     });
 
     let restart_server_config_filepath = config_filepath.to_owned();
@@ -58,13 +68,16 @@ pub fn handle() -> Window {
                     let restart_server_config_filepath = restart_server_config_filepath.clone();
                     let server_proc_tx = server_proc_tx.clone();
                     handle = tokio::spawn(async move {
-                        let apimock = server(
+                        let server = App::new(
                             restart_server_config_filepath.as_str(),
-                            server_proc_tx,
+                            None,
+                            // todo: middleware
+                            None,
+                            Some(server_proc_tx),
                             true,
                         )
                         .await;
-                        let _ = apimock.start().await;
+                        let _ = server.start().await;
                     });
                 }
                 None => {
@@ -80,7 +93,15 @@ pub fn handle() -> Window {
         .with_label("API mokka");
     window.set_color(Color::White);
 
-    let _ = tabs::handle(config_filepath, server_proc_rx, restart_server_tx);
+    let config_url_paths = config_url_paths_rx
+        .recv()
+        .expect("failed to receive config url paths");
+    let _ = tabs::handle(
+        config_filepath,
+        config_url_paths,
+        server_proc_rx,
+        restart_server_tx,
+    );
 
     window.make_resizable(true);
     window.end();

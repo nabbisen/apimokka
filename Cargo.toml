@@ -1,6 +1,6 @@
 [package]
 name = "apimokka"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 
 description = "Mock with mokka ☕️🌄 Visual mocking helper to handle API mock Server generating HTTP/JSON responses"
@@ -27,7 +27,8 @@ lto = false           # disable link-time optimizations
 incremental = true
 
 [dependencies]
-apimock = { version = "2", features = ["spawn"] }
+# todo: remove debug feature finally
+apimock = { version = "3", features = ["spawn", "debug"] }
 fltk = { version = "1", features = ["fltk-bundled"] }
 tokio = "^1.44"
 
