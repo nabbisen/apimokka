@@ -79,6 +79,7 @@ jobs:
           mv "${BUILT_FILEPATH}" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
 
           curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock.toml
+          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/middleware.rhai
           mkdir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data"
           curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/api.json5
           curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/home.json

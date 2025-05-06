@@ -1,9 +1,9 @@
 [package]
 name = "apimokka"
-version = "0.5.0"
+version = "0.5.1"
 edition = "2021"
 
-description = "Mock with mokka ☕️🌄 Visual mocking helper to handle API mock Server generating HTTP/JSON responses"
+description = "Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res"
 authors = ["nabbisen <nabbisen@scqr.net>"]
 license = "Apache-2.0"
 
