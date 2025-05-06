@@ -13,11 +13,13 @@ use tokio::sync::{
 mod client_tab;
 mod config_tab;
 mod config_url_paths_tab;
+mod middleware_tab;
 mod server_tab;
 
 pub fn handle(
     config_filepath: &str,
     config_url_paths: Option<ConfigUrlPaths>,
+    middleware_filepath: Option<String>,
     server_rx: Arc<Mutex<Receiver<String>>>,
     restart_server_tx: Arc<Mutex<Sender<()>>>,
 ) -> Tabs {
@@ -27,6 +29,9 @@ pub fn handle(
     let _ = client_tab::handle();
     let _ = config_tab::handle(config_filepath, restart_server_tx);
     let _ = config_url_paths_tab::handle(config_url_paths);
+    if let Some(middleware_filepath) = middleware_filepath {
+        let _ = middleware_tab::handle(middleware_filepath.as_str());
+    }
 
     tabs.end();
     tabs.auto_layout();

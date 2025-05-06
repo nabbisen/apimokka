@@ -3,10 +3,14 @@ use fltk::{
     button::Button,
     enums::{Align, Color},
     group::{Flex, FlexType},
-    prelude::{GroupExt, WidgetBase, WidgetExt},
+    output::Output,
+    prelude::{GroupExt, InputExt, WidgetBase, WidgetExt},
 };
 
-use crate::app::consts::{BUTTON_HEIGHT, BUTTON_WIDTH, FLEX_SPACING};
+use crate::app::{
+    consts::{BUTTON_HEIGHT, BUTTON_WIDTH, FLEX_SPACING},
+    utils::open_with_default_app,
+};
 
 /// entry point
 pub fn handle(config_url_paths: Option<ConfigUrlPaths>) -> Flex {
@@ -15,6 +19,10 @@ pub fn handle(config_url_paths: Option<ConfigUrlPaths>) -> Flex {
     let mut vflex = Flex::default_fill();
     vflex.set_spacing(FLEX_SPACING);
     vflex.set_type(FlexType::Column);
+
+    // let mut selected_content = Output::default().with_size(500, 200);
+    // let selected_content_ref = Rc::from(RefCell::from(selected_content.clone()));
+    // selected_content.set_value("test");
 
     let config_url_paths = config_url_paths.unwrap_or_default();
     let mut keys = config_url_paths
@@ -29,26 +37,46 @@ pub fn handle(config_url_paths: Option<ConfigUrlPaths>) -> Flex {
         match x {
             Some((k, v)) => {
                 let mut row = Flex::default_fill();
+                row.set_align(Align::Left | Align::Inside);
                 row.set_spacing(FLEX_SPACING);
 
-                let mut col = Flex::default();
-                col.set_align(Align::Inside | Align::Left);
-                col.set_label(k.as_str());
-                col.end();
+                let url_path_key_col = Flex::default();
+                let mut url_path = Output::default();
+                url_path.set_value(k.as_str());
+                url_path_key_col.end();
 
-                let mut link = Button::default().with_size(BUTTON_WIDTH, BUTTON_HEIGHT);
+                let mut url_path_value_col = Flex::default();
+                let mut link = Output::default().with_size(BUTTON_WIDTH, BUTTON_HEIGHT);
+                link.set_color(Color::BackGround);
                 let data_src = v.clone().data_src.unwrap_or_default();
                 if !data_src.is_empty() {
-                    link.set_label(data_src.as_str());
+                    link.set_value(format!("[file] {}", data_src).as_str());
+                    link.set_text_color(Color::Blue);
+                    let mut button = Button::default().with_size(10, BUTTON_HEIGHT / 2);
                     // todo: open file
-                    link.set_callback(|_| println!("hejhej"));
+                    // let selected_content_ref = Rc::clone(&selected_content_ref);
+                    // button.set_callback(move |_| {
+                    //     let mut selected_content_ref = selected_content_ref.borrow_mut();
+                    //     selected_content_ref.set_value(data_src.as_str());
+                    // });
+                    button.set_color(Color::Blue);
+                    button.set_callback(move |_| {
+                        let _ = open_with_default_app(data_src.as_str());
+                    });
+                    url_path_value_col.fixed(&button, 10);
+                    url_path_value_col.fixed(&link, BUTTON_WIDTH * 2);
                 } else {
-                    let data_text = v.clone().data_text.unwrap_or_default();
-                    link.set_label(data_text.as_str());
-                    link.set_color(Color::Free);
+                    let data_text = v.clone().data_text;
+                    if let Some(data_text) = data_text {
+                        link.set_value(format!("[data] {}", data_text).as_str());
+                    } else {
+                        link.set_value(format!("[http status] {}", v.clone().code).as_str());
+                    }
+                    url_path_value_col.fixed(&link, BUTTON_WIDTH * 2);
                 }
+                url_path_value_col.end();
 
-                row.fixed(&link, BUTTON_WIDTH * 2);
+                row.fixed(&url_path_value_col, BUTTON_WIDTH * 2 + 20);
                 row.end();
             }
             _ => (),

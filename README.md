@@ -1,6 +1,6 @@
 # API mokka
 
-Mock with mokka ☕️🌄
+Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res written in Rust.
 
 [![crates.io](https://img.shields.io/crates/v/apimokka?label=latest)](https://crates.io/crates/apimokka)
 [![Documentation](https://docs.rs/apimokka/badge.svg?version=latest)](https://docs.rs/apimokka)

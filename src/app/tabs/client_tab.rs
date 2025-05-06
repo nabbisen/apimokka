@@ -1,5 +1,4 @@
-use std::process::Command;
-
+use chrono::Local;
 use fltk::{
     button::Button,
     enums::{Color, Event},
@@ -9,7 +8,12 @@ use fltk::{
     terminal::Terminal,
 };
 
-use crate::app::consts::{BUTTON_HEIGHT, CONTAINER_WIDTH, FLEX_SPACING, LOG_TERMINAL_HEIGHT};
+use crate::app::{
+    consts::{BUTTON_HEIGHT, CONTAINER_WIDTH, FLEX_SPACING, LOG_TERMINAL_HEIGHT},
+    utils::command_output,
+};
+
+const DEFAULT_COMMAND_LINE: &str = "curl -i http://localhost:3001/";
 
 /// entry point
 pub fn handle() -> Flex {
@@ -20,10 +24,20 @@ pub fn handle() -> Flex {
     vflex.set_spacing(FLEX_SPACING);
     vflex.set_type(FlexType::Column);
 
+    let flex = Flex::new(0, 0, CONTAINER_WIDTH, BUTTON_HEIGHT * 2, "");
+
+    let mut command_line_input = Input::default();
+    command_line_input.set_size(CONTAINER_WIDTH, BUTTON_HEIGHT);
+    command_line_input.set_value(DEFAULT_COMMAND_LINE);
+    let mut command_button = Button::default().with_size(0, BUTTON_HEIGHT);
+    command_button.set_label("run command");
+
+    flex.end();
+
     let mut terminal = Terminal::default();
     terminal.set_size(CONTAINER_WIDTH, LOG_TERMINAL_HEIGHT);
     terminal.set_ansi(true);
-    terminal.set_color(Color::Blue);
+    terminal.set_color(Color::DarkBlue);
 
     terminal.handle(|stuff, event| match event {
         Event::Push => {
@@ -40,15 +54,7 @@ pub fn handle() -> Flex {
     // text_display.set_linenumber_size(LINE_NUMBER_WIDTH - 3);
     // text_display.set_buffer(Some(log_buffer.clone()));
 
-    let flex = Flex::new(0, 0, CONTAINER_WIDTH, BUTTON_HEIGHT * 2, "");
-
-    let mut command_line_input = Input::default();
-    command_line_input.set_size(CONTAINER_WIDTH, BUTTON_HEIGHT);
-    let mut command_button = Button::default().with_size(0, BUTTON_HEIGHT);
-    command_button.set_label("run command");
     command_button.set_callback(move |_| command_button_onclick(&command_line_input, &terminal));
-
-    flex.end();
 
     vflex.fixed(&flex, BUTTON_HEIGHT * 2);
     vflex.end();
@@ -62,26 +68,17 @@ fn command_button_onclick(command_line_input: &Input, terminal: &Terminal) {
 
     let terminal = terminal.clone();
     let _ = tokio::spawn(async move {
-        let output = if cfg!(target_os = "windows") {
-            Command::new("cmd")
-                // utf-8 specified
-                .args(&["/C", "chcp 65001"])
-                .output()
-                .expect("Failed to run chcp command");
-            Command::new("cmd").args(&["/C", &command]).output()
-        } else {
-            Command::new("sh").args(&["-c", &command]).output()
-        }
-        .expect("Failed to run command");
-        let s = format!(
-            "$ {} ->\n{}\n",
+        let output = command_output(command.as_str());
+        let trailing = match output {
+            Ok(output) => output,
+            Err(err) => format!("Failed to run command: {}", err),
+        };
+        let appened = format!(
+            "  [{}]\n-------------------------\n$ {}\n\n{}\n\n",
+            Local::now().format("%Y-%m-%d %H:%M:%S"),
             command,
-            String::from_utf8_lossy(&output.stdout).to_string()
+            trailing
         );
-        // println!(
-        //     "xxx {:?}",
-        //     String::from_utf8_lossy(&output.stdout).to_string()
-        // );
-        terminal.clone().append(s.as_str());
+        terminal.clone().append(appened.as_str());
     });
 }
