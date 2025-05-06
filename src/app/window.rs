@@ -27,6 +27,8 @@ pub fn handle() -> Window {
         }
     };
 
+    let middleware_filepath = Some("tests/fixtures/middleware.rhai".to_owned());
+
     // server connector
     // - default
     let (server_proc_tx, server_proc_rx) = channel::<String>(255);
@@ -40,11 +42,12 @@ pub fn handle() -> Window {
 
     // server process
     let start_server_proc_tx = server_proc_tx.clone();
+    let start_server_middleware_filepath = middleware_filepath.clone();
     let mut handle = tokio::spawn(async move {
         let server = server(
             config_filepath,
             // todo: middleware
-            None,
+            start_server_middleware_filepath,
             start_server_proc_tx,
             true,
         )
@@ -56,6 +59,7 @@ pub fn handle() -> Window {
     });
 
     let restart_server_config_filepath = config_filepath.to_owned();
+    let restart_server_middleware_filepath = middleware_filepath.clone();
     let _ = tokio::spawn(async move {
         loop {
             match restart_server_rx.recv().await {
@@ -66,11 +70,13 @@ pub fn handle() -> Window {
                     // restart server
                     let restart_server_config_filepath = restart_server_config_filepath.clone();
                     let server_proc_tx = server_proc_tx.clone();
+                    let restart_server_middleware_filepath =
+                        restart_server_middleware_filepath.clone();
                     handle = tokio::spawn(async move {
                         let server = server(
                             restart_server_config_filepath.as_str(),
                             // todo: middleware
-                            None,
+                            restart_server_middleware_filepath,
                             server_proc_tx,
                             true,
                         )
@@ -97,6 +103,7 @@ pub fn handle() -> Window {
     let _ = tabs::handle(
         config_filepath,
         config_url_paths,
+        middleware_filepath,
         server_proc_rx,
         restart_server_tx,
     );
