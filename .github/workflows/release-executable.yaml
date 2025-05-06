@@ -83,6 +83,7 @@ jobs:
           mkdir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data"
           curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/api.json5
           curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/home.json
+          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/middleware-test.json
           mkdir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-dyn-data"
 
           echo "RELEASE_SRC_DIR=${RELEASE_SRC_DIR}" >> $GITHUB_ENV
