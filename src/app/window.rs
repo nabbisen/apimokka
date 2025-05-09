@@ -1,4 +1,4 @@
-use std::{fs, path::Path, sync::Arc};
+use std::sync::Arc;
 
 use fltk::{
     enums::Color,
@@ -14,37 +14,13 @@ use apimock::{
 };
 
 use super::{
-    consts::{CONTAINER_HEIGHT, CONTAINER_WIDTH, DEFAULT_CONFIG_FILEPATH, DEV_CONFIG_FILEPATH},
+    consts::{CONTAINER_HEIGHT, CONTAINER_WIDTH},
     tabs,
 };
 
 /// entry point
 pub fn handle() -> Window {
-    let mut env_args = EnvArgs::init_with_default();
-
-    // todo: integrate to apimock ? env vars are used only in apimock ?
-    let config_filepath = match config_filepath() {
-        Ok(x) => x,
-        Err(err) => {
-            return error_window(err.as_str());
-        }
-    };
-    env_args.config_filepath = Some(config_filepath.to_owned());
-
-    // todo: get middleware file location and validate it
-    //       temporary values below ?
-    let middleware_filepath_str = (if cfg!(debug_assertions) {
-        "tests/fixtures/middleware.rhai"
-    } else {
-        "middleware.rhai"
-    })
-    .to_owned();
-    let middleware_filepath = if Path::new(middleware_filepath_str.as_str()).exists() {
-        Some(middleware_filepath_str)
-    } else {
-        None
-    };
-    env_args.middleware_filepath = middleware_filepath;
+    let env_args = EnvArgs::init_with_default();
 
     // server connector
     // - default
@@ -85,7 +61,8 @@ pub fn handle() -> Window {
                     });
                 }
                 None => {
-                    println!("Receiver closed");
+                    // todo: printed out below once when client tab button clicked after server started ?
+                    // println!("Receiver closed");
                     break;
                 }
             }
@@ -100,7 +77,7 @@ pub fn handle() -> Window {
     let config_url_paths = match config_url_paths_rx.recv() {
         Ok(x) => x,
         Err(err) => {
-            return error_window(format!("failed to receive config url paths - {}", err).as_str())
+            return error_window(format!("failed to receive config url paths -\n{}", err).as_str())
         }
     };
 
@@ -118,24 +95,12 @@ pub fn handle() -> Window {
     window
 }
 
-/// detect config file
-fn config_filepath<'a>() -> Result<&'a str, String> {
-    for x in [DEFAULT_CONFIG_FILEPATH, DEV_CONFIG_FILEPATH] {
-        if fs::metadata(x).is_ok_and(|x| x.is_file()) {
-            return Ok(x);
-        }
-    }
-    Err(format!(
-        "Config file is missing: either `{}` or `{}` is required",
-        DEFAULT_CONFIG_FILEPATH, DEV_CONFIG_FILEPATH
-    ))
-}
-
 /// error window (instead of app window)
 fn error_window(msg: &str) -> Window {
-    let window = Window::default().with_size(640, 400);
+    let mut window = Window::default().with_size(640, 400);
     let mut frame = Frame::default_fill().with_label(msg);
     frame.set_color(Color::Yellow);
     window.end();
+    window.show();
     window
 }

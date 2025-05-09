@@ -24,15 +24,17 @@ pub fn handle(
     server_rx: Arc<Mutex<Receiver<String>>>,
     restart_server_tx: Arc<Mutex<Sender<()>>>,
 ) -> Tabs {
-    let config_filepath = env_args.config_filepath.clone().unwrap();
-    let port = env_args.port.unwrap_or(DEFAULT_LISTENER_PORT);
-
     let mut tabs = Tabs::default_fill();
 
     let _ = server_tab::handle(server_rx);
+    let port = env_args.port.unwrap_or(DEFAULT_LISTENER_PORT);
     let _ = client_tab::handle(port);
-    let _ = config_tab::handle(config_filepath.as_str(), restart_server_tx);
-    let _ = config_url_paths_tab::handle(config_url_paths);
+
+    if let Some(config_filepath) = env_args.config_filepath.clone() {
+        let _ = config_tab::handle(config_filepath.as_str(), restart_server_tx);
+        let _ = config_url_paths_tab::handle(config_url_paths);
+    }
+
     if let Some(middleware_filepath) = env_args.middleware_filepath.clone() {
         let _ = middleware_tab::handle(middleware_filepath.as_str());
     }
