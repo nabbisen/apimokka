@@ -1,11 +1,25 @@
-# binding to Node.js
+# API mokka
+
+Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res written in Rust.
+
+Rust GUI app Binding for Node.js.
 
 ## Supported platforms
-
-Due to https://napi.rs/docs/cli/napi-config,
-
-`triples.defaults` = list of:
 
 - `x86_64-unknown-linux-gnu`
 - `arm64-apple-darwin`
 - `x86_64-pc-windows-msvc`
+
+ref: https://napi.rs/docs/cli/napi-config
+
+## Install
+
+```
+$ npm install -D apimokka
+```
+
+## Run
+
+```
+$ npm run apimokka
+```
