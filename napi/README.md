@@ -12,14 +12,16 @@ Rust GUI app Binding for Node.js.
 
 ref: https://napi.rs/docs/cli/napi-config
 
-## Install
+## Usage
 
-```
+### Install
+
+```console
 $ npm install -D apimokka
 ```
 
-## Run
+### Run
 
-```
+```console
 $ npm run apimokka
 ```

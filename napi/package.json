@@ -3,6 +3,9 @@
     "version": "0.7.0",
     "main": "index.js",
     "types": "index.d.ts",
+    "bin": {
+        "apimokka": "scripts/run-built-package.js"
+    },
     "napi": {
         "name": "apimokka",
         "triples": {
@@ -21,9 +24,9 @@
         "ava": "^6.3.0"
     },
     "optionalDependencies": {
-        "apimokka-win32-x64-msvc": "0.1.0",
-        "apimokka-darwin-arm64": "0.1.0",
-        "apimokka-linux-x64-gnu": "0.1.0"
+        "apimokka-win32-x64-msvc": "*",
+        "apimokka-darwin-arm64": "*",
+        "apimokka-linux-x64-gnu": "*"
     },
     "ava": {
         "timeout": "3m"
@@ -40,6 +43,7 @@
         "test": "ava",
         "universal": "napi universal",
         "version": "napi version",
-        "postinstall": "echo todo"
+        "create-npm-dir": "napi create-npm-dir -t .",
+        "postinstall": "node scripts/postinstall.js"
     }
 }

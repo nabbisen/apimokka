@@ -3,8 +3,6 @@ name: npm
 on:
   release:
     types: [created]
-  # todo: temporary push trigger for dev
-  # push
 
 permissions:
   contents: write
@@ -45,7 +43,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       
-      # [ fltk build preparation ]
+      # [ `fltk-bundle` requirements on Linux ]
       - name: Install fltk-rs requirements on Linux
         if: matrix.target == 'x86_64-unknown-linux-gnu'
         run: |
@@ -93,53 +91,7 @@ jobs:
           name: bindings-${{ matrix.target }}
           path: ${{ env.PRODUCT_BASENAME }}.*.node
           if-no-files-found: error
-      
-      # - name: Prepare for release asset
-      #   run: |
-      #     BUILT_FILEPATH=${{ env.PRODUCT_BASENAME }}.${{ matrix.napiplatform }}.node
-      #     RELEASE_ASSET_BASENAME=${{ env.PRODUCT_BASENAME }}@${{ matrix.name }}-${{ env.TAG }}
-      #     RELEASE_SRC_DIR=${RELEASE_ASSET_BASENAME}
-      #     RELEASE_ASSET_FILENAME=${RELEASE_ASSET_BASENAME}${{ matrix.archive_ext }}
-          
-      #     mkdir -p "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}"
-          
-      #     mv "${BUILT_FILEPATH}" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-      #     mv "index.js" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-      #     mv "index.d.ts" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-      #     mv "run-built-package.js" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-      #     mv "package.json" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-
-      #     echo "RELEASE_SRC_DIR=${RELEASE_SRC_DIR}" >> $GITHUB_ENV
-      #     echo "RELEASE_ASSET_FILENAME=${RELEASE_ASSET_FILENAME}" >> $GITHUB_ENV
-
-      # # BSD tar on macOS: first 8MB of the file are sometimes all NUL byte
-      # # refs: https://github.com/actions/cache/issues/403 , https://github.com/rust-lang/cargo/issues/8603
-      # - name: Mitigate macOS tar bug
-      #   if: matrix.target == 'aarch64-apple-darwin'
-      #   run: |
-      #     sudo /usr/sbin/purge
-      
-      # - name: Create archive as release asset - Linux
-      #   if: >
-      #     matrix.target != 'aarch64-apple-darwin' &&
-      #     matrix.target != 'x86_64-pc-windows-msvc'
-      #   run: |
-      #     cd "${{ env.JOB_WORKDIR }}"
-      #     tar czf "../${RELEASE_ASSET_FILENAME}" "${RELEASE_SRC_DIR}"
-      
-      # - name: Create archive as release asset - Windows / macOS
-      #   if: >
-      #     matrix.target == 'aarch64-apple-darwin' ||
-      #     matrix.target == 'x86_64-pc-windows-msvc'
-      #   run: |
-      #     cd "${{ env.JOB_WORKDIR }}"
-      #     7z a "../${RELEASE_ASSET_FILENAME}" "${RELEASE_SRC_DIR}"
-      
-      # - name: Update release with new asset
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   run: gh release upload ${{ github.ref_name }} ${RELEASE_ASSET_FILENAME}
- 
+  
   publish:
     name: Publish on release tags
     needs:
@@ -148,8 +100,8 @@ jobs:
     steps:
       - name: Check if release tag
         run: |
-          if [[ "${GITHUB_REF_NAME}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "${GITHUB_REF_NAME}: Semantic versioning tagged - OK"
+          if [[ "${TAG}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "${TAG}: Semantic versioning tagged - OK"
           else
             echo "Not a release tag. Skipped."
             exit 1
@@ -177,7 +129,9 @@ jobs:
           path: artifacts
       
       - name: Move artifacts
-        run: npm run prepublishOnly
+        run: |
+          npm run create-npm-dir
+          npm run artifacts --gh-release-id ${{ env.TAG }}
       
       - name: List packages
         run: ls -R ./npm

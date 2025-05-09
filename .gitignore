@@ -22,5 +22,3 @@ bun.lockb
 .env
 .env.*
 !.env.example
-/napi/index.js
-/napi/index.d.ts
