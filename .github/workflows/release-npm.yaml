@@ -83,7 +83,7 @@ jobs:
 
       - name: Build Rust executable
         run: |
-          npm run build
+          npm run build --target ${{ matrix.target }}
 
       # [ release asset ]
       - name: Upload artifact
