@@ -5,14 +5,7 @@
     "types": "index.d.ts",
     "napi": {
         "name": "apimokka",
-        "triples": {
-            "defaults": false,
-            "additional": [
-                "x86_64-unknown-linux-gnu",
-                "aarch64-apple-darwin",
-                "x86_64-pc-windows-msvc"
-            ]
-        }
+        "triples": {}
     },
     "license": "Apache-2.0",
     "devDependencies": {
@@ -27,7 +20,7 @@
     },
     "scripts": {
         "artifacts": "napi artifacts",
-        "build": "napi build --platform --features napi",
+        "build": "napi build --release --platform --features napi",
         "build:debug": "napi build --platform --features napi",
         "build:local": "napi build --platform --features napi --cargo-cwd ../",
         "prepublishOnly": "napi prepublish -t npm",
