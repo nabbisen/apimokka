@@ -1,0 +1,31 @@
+{
+    "name": "apimokka",
+    "version": "0.1.0",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "napi": {
+        "name": "apimokka",
+        "triples": {}
+    },
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "@napi-rs/cli": "^2.18.4",
+        "ava": "^6.3.0"
+    },
+    "ava": {
+        "timeout": "3m"
+    },
+    "engines": {
+        "node": ">= 10"
+    },
+    "scripts": {
+        "artifacts": "napi artifacts",
+        "build": "napi build --platform --features napi --cargo-cwd ../",
+        "build:debug": "napi build --platform",
+        "prepublishOnly": "napi prepublish -t npm",
+        "test": "ava",
+        "universal": "napi universal",
+        "version": "napi version",
+        "postinstall": "echo todo"
+    }
+}

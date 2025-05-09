@@ -1,6 +1,6 @@
 [package]
 name = "apimokka"
-version = "0.6.0"
+version = "0.7.0"
 edition = "2021"
 
 description = "Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res"
@@ -12,6 +12,9 @@ keywords = ["https", "api", "mock", "testing"]
 repository = "https://github.com/nabbisen/apimokka"
 readme = "README.md"
 rust-version = "1.78.0"
+
+[lib]
+crate-type = ["rlib", "cdylib"]
 
 [profile.release]     # shrink executable size
 opt-level = "z"
@@ -26,12 +29,26 @@ lto = false           # disable link-time optimizations
 # strip = "debuginfo" # reduce size
 incremental = true
 
+[features]
+default = []
+napi = ["dep:napi", "dep:napi-derive", "dep:napi-build"]
+
+[[bin]]
+name = "apimokka"
+path = "src/main.rs"
+required-features = []
+
 [dependencies]
 # todo: remove debug feature finally
 apimock = { version = "3", features = ["spawn", "debug"] }
 chrono = { version = "0", default-features = false, features = ["clock"] }
 fltk = { version = "1", features = ["fltk-bundled"] }
 tokio = "^1.44"
+napi = { version = "2", default-features = false, features = ["napi4", "async"], optional = true }
+napi-derive =  { version = "2", optional = true }
 
 [package.metadata.docs.rs]
 dependencies.fltk = { version = "1", default-features = false }
+
+[build-dependencies]
+napi-build = { version = "2", optional = true }
