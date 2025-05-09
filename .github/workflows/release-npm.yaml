@@ -1,10 +1,10 @@
 name: npm
 
 on:
-# todo: temporary push trigger for dev
-#  release:
-#    types: [created]
-  push
+  release:
+    types: [created]
+  # todo: temporary push trigger for dev
+  # push
 
 permissions:
   contents: write
@@ -29,11 +29,11 @@ jobs:
             os: ubuntu-latest
             archive_ext: .tar.gz
             napiplatform: linux-x64-gnu
-          - name: macOS-aarch64
-            target: x86_64-apple-darwin
-            os: macos-latest
-            archive_ext: .zip
-            napiplatform: darwin-x64
+          # - name: macOS-aarch64
+          #   target: x86_64-apple-darwin
+          #   os: macos-latest
+          #   archive_ext: .zip
+          #   napiplatform: darwin-x64
           - name: Windows-x64
             target: x86_64-pc-windows-msvc
             os: windows-latest
