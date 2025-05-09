@@ -177,7 +177,7 @@ jobs:
           path: artifacts
       
       - name: Move artifacts
-        run: npm run artifacts
+        run: npm run prepublishOnly
       
       - name: List packages
         run: ls -R ./npm
