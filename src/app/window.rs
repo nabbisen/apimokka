@@ -26,10 +26,7 @@ pub fn handle() -> Window {
     let config_filepath = match config_filepath() {
         Ok(x) => x,
         Err(err) => {
-            let window = Window::default_fill();
-            let _ = Frame::default_fill().with_label(err.as_str());
-            window.end();
-            return window;
+            return error_window(err.as_str());
         }
     };
     env_args.config_filepath = Some(config_filepath.to_owned());
@@ -100,9 +97,13 @@ pub fn handle() -> Window {
         .with_label("API mokka");
     window.set_color(Color::White);
 
-    let config_url_paths = config_url_paths_rx
-        .recv()
-        .expect("failed to receive config url paths");
+    let config_url_paths = match config_url_paths_rx.recv() {
+        Ok(x) => x,
+        Err(err) => {
+            return error_window(format!("failed to receive config url paths - {}", err).as_str())
+        }
+    };
+
     let _ = tabs::handle(
         &env_args,
         config_url_paths,
@@ -128,4 +129,13 @@ fn config_filepath<'a>() -> Result<&'a str, String> {
         "Config file is missing: either `{}` or `{}` is required",
         DEFAULT_CONFIG_FILEPATH, DEV_CONFIG_FILEPATH
     ))
+}
+
+/// error window (instead of app window)
+fn error_window(msg: &str) -> Window {
+    let window = Window::default().with_size(640, 400);
+    let mut frame = Frame::default_fill().with_label(msg);
+    frame.set_color(Color::Yellow);
+    window.end();
+    window
 }
