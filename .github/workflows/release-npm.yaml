@@ -131,7 +131,7 @@ jobs:
       - name: Move artifacts
         run: |
           npm run create-npm-dir
-          npm run artifacts --gh-release-id ${{ env.TAG }}
+          npm run artifacts -- --gh-release-id ${{ env.TAG }}
       
       - name: List packages
         run: ls -R ./npm
