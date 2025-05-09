@@ -20,8 +20,9 @@
     },
     "scripts": {
         "artifacts": "napi artifacts",
-        "build": "napi build --platform --features napi --cargo-cwd ../",
-        "build:debug": "napi build --platform",
+        "build": "napi build --platform --features napi",
+        "build:debug": "napi build --platform --features napi",
+        "build:local": "napi build --platform --features napi --cargo-cwd ../",
         "prepublishOnly": "napi prepublish -t npm",
         "test": "ava",
         "universal": "napi universal",
