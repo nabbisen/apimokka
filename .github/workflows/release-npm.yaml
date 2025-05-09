@@ -143,5 +143,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm config set provenance true
+          npm config set gh_release_id ${{ env.TAG }}
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          npm publish --access public -- --gh-release-id ${{ env.TAG }}
+          npm publish --access public
