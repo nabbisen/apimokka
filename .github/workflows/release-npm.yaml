@@ -26,14 +26,17 @@ jobs:
         include:
           - name: Linux-x64-gnu
             target: x86_64-unknown-linux-gnu
+            os: ubuntu-latest
             archive_ext: .tar.gz
             napiplatform: linux-x64-gnu
           - name: macOS-aarch64
             target: aarch64-apple-darwin
+            os: macos-latest
             archive_ext: .zip
             napiplatform: darwin-x64
           - name: Windows-x64
             target: x86_64-pc-windows-msvc
+            os: windows-latest
             archive_ext: .zip
             napiplatform: win32-x64-msvc
 
