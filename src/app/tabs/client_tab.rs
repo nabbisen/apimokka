@@ -16,10 +16,8 @@ use crate::app::{
     utils::command_output,
 };
 
-const DEFAULT_COMMAND_LINE: &str = "curl -i http://localhost:3001/";
-
 /// entry point
-pub fn handle() -> Flex {
+pub fn handle(port: u16) -> Flex {
     let tab = Flex::default_fill().with_label("Client\t\t").row();
 
     // container for floating components such as buttons
@@ -36,7 +34,7 @@ pub fn handle() -> Flex {
 
     let mut command_line_input = Input::default();
     command_line_input.set_size(CONTAINER_WIDTH, BUTTON_HEIGHT);
-    command_line_input.set_value(DEFAULT_COMMAND_LINE);
+    command_line_input.set_value(format!("curl -i http://localhost:{}/", port).as_str());
     let mut command_button = Button::default().with_size(0, BUTTON_HEIGHT);
     command_button.set_label("run command");
 

@@ -8,7 +8,10 @@ use fltk::{
 };
 use tokio::sync::{mpsc::channel, Mutex};
 
-use apimock::{core::config::ConfigUrlPaths, server};
+use apimock::{
+    core::{args::EnvArgs, config::ConfigUrlPaths},
+    server,
+};
 
 use super::{
     consts::{CONTAINER_HEIGHT, CONTAINER_WIDTH, DEFAULT_CONFIG_FILEPATH, DEV_CONFIG_FILEPATH},
@@ -17,6 +20,9 @@ use super::{
 
 /// entry point
 pub fn handle() -> Window {
+    let mut env_args = EnvArgs::init_with_default();
+
+    // todo: integrate to apimock ? env vars are used only in apimock ?
     let config_filepath = match config_filepath() {
         Ok(x) => x,
         Err(err) => {
@@ -26,6 +32,7 @@ pub fn handle() -> Window {
             return window;
         }
     };
+    env_args.config_filepath = Some(config_filepath.to_owned());
 
     // todo: get middleware file location and validate it
     //       temporary values below ?
@@ -40,6 +47,7 @@ pub fn handle() -> Window {
     } else {
         None
     };
+    env_args.middleware_filepath = middleware_filepath;
 
     // server connector
     // - default
@@ -54,24 +62,16 @@ pub fn handle() -> Window {
 
     // server process
     let start_server_proc_tx = server_proc_tx.clone();
-    let start_server_middleware_filepath = middleware_filepath.clone();
+    let start_server_env_args = env_args.clone();
     let mut handle = tokio::spawn(async move {
-        let server = server(
-            config_filepath,
-            // todo: middleware
-            start_server_middleware_filepath,
-            start_server_proc_tx,
-            true,
-        )
-        .await;
+        let server = server(start_server_env_args, start_server_proc_tx, true).await;
 
         let _ = config_url_paths_tx.send(server.config_url_paths());
 
         let _ = server.start().await;
     });
 
-    let restart_server_config_filepath = config_filepath.to_owned();
-    let restart_server_middleware_filepath = middleware_filepath.clone();
+    let restart_server_env_args = env_args.clone();
     let _ = tokio::spawn(async move {
         loop {
             match restart_server_rx.recv().await {
@@ -80,19 +80,10 @@ pub fn handle() -> Window {
                     handle.abort();
 
                     // restart server
-                    let restart_server_config_filepath = restart_server_config_filepath.clone();
+                    let restart_server_env_args = restart_server_env_args.clone();
                     let server_proc_tx = server_proc_tx.clone();
-                    let restart_server_middleware_filepath =
-                        restart_server_middleware_filepath.clone();
                     handle = tokio::spawn(async move {
-                        let server = server(
-                            restart_server_config_filepath.as_str(),
-                            // todo: middleware
-                            restart_server_middleware_filepath,
-                            server_proc_tx,
-                            true,
-                        )
-                        .await;
+                        let server = server(restart_server_env_args, server_proc_tx, true).await;
                         let _ = server.start().await;
                     });
                 }
@@ -113,9 +104,8 @@ pub fn handle() -> Window {
         .recv()
         .expect("failed to receive config url paths");
     let _ = tabs::handle(
-        config_filepath,
+        &env_args,
         config_url_paths,
-        middleware_filepath,
         server_proc_rx,
         restart_server_tx,
     );
