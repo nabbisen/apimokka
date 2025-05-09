@@ -144,6 +144,4 @@ jobs:
         run: |
           npm config set provenance true
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
-          jq '.scripts.prepublishOnly = "napi prepublish -t npm --gh-release-id ${{ env.TAG }}"' package.json > package-tmp.json
-          mv package-tmp.json package.json
           npm publish --access public

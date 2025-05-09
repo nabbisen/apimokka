@@ -1,6 +1,6 @@
 {
     "name": "@apimokka/bin",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res written in Rust.",
     "author": "nabbisen<nabbisen@scqr.net",
     "license": "Apache-2.0",
@@ -23,6 +23,11 @@
         "testing",
         "stub",
         "simulate"
+    ],
+    "files": [
+        "index.js",
+        "index.d.ts",
+        "scripts"
     ],
     "main": "index.js",
     "types": "index.d.ts",
