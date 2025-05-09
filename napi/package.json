@@ -19,6 +19,11 @@
         "@napi-rs/cli": "^2.18.4",
         "ava": "^6.3.0"
     },
+    "optionalDependencies": {
+        "apimokka-win32-x64-msvc": "0.1.0",
+        "apimokka-darwin-arm64": "0.1.0",
+        "apimokka-linux-x64-gnu": "0.1.0"
+    },
     "ava": {
         "timeout": "3m"
     },

@@ -56,6 +56,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: yarn
       
       - name: Prepare napi
         run: cp -r napi/* .
@@ -63,7 +64,7 @@ jobs:
         # working-directory: napi
       
       - name: Install npm packages
-        run: npm install
+        run: yarn install
       
       # [ build ]
       - name: Install Rust
@@ -82,51 +83,99 @@ jobs:
 
       - name: Build Rust executable
         run: |
-          npm run build
+          yarn build
 
       # [ release asset ]
-      - name: Prepare for release asset
-        run: |
-          BUILT_FILEPATH=${{ env.PRODUCT_BASENAME }}.${{ matrix.napiplatform }}.node
-          RELEASE_ASSET_BASENAME=${{ env.PRODUCT_BASENAME }}@${{ matrix.name }}-${{ env.TAG }}
-          RELEASE_SRC_DIR=${RELEASE_ASSET_BASENAME}
-          RELEASE_ASSET_FILENAME=${RELEASE_ASSET_BASENAME}${{ matrix.archive_ext }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bindings-${{ matrix.target }}
+          path: ${{ env.PRODUCT_BASENAME }}.*.node
+          if-no-files-found: error
+      
+      # - name: Prepare for release asset
+      #   run: |
+      #     BUILT_FILEPATH=${{ env.PRODUCT_BASENAME }}.${{ matrix.napiplatform }}.node
+      #     RELEASE_ASSET_BASENAME=${{ env.PRODUCT_BASENAME }}@${{ matrix.name }}-${{ env.TAG }}
+      #     RELEASE_SRC_DIR=${RELEASE_ASSET_BASENAME}
+      #     RELEASE_ASSET_FILENAME=${RELEASE_ASSET_BASENAME}${{ matrix.archive_ext }}
           
-          mkdir -p "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}"
+      #     mkdir -p "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}"
           
-          mv "${BUILT_FILEPATH}" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-          mv "index.js" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-          mv "index.d.ts" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-          mv "run-built-package.js" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-          mv "package.json" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
+      #     mv "${BUILT_FILEPATH}" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
+      #     mv "index.js" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
+      #     mv "index.d.ts" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
+      #     mv "run-built-package.js" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
+      #     mv "package.json" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
 
-          echo "RELEASE_SRC_DIR=${RELEASE_SRC_DIR}" >> $GITHUB_ENV
-          echo "RELEASE_ASSET_FILENAME=${RELEASE_ASSET_FILENAME}" >> $GITHUB_ENV
+      #     echo "RELEASE_SRC_DIR=${RELEASE_SRC_DIR}" >> $GITHUB_ENV
+      #     echo "RELEASE_ASSET_FILENAME=${RELEASE_ASSET_FILENAME}" >> $GITHUB_ENV
 
-      # BSD tar on macOS: first 8MB of the file are sometimes all NUL byte
-      # refs: https://github.com/actions/cache/issues/403 , https://github.com/rust-lang/cargo/issues/8603
-      - name: Mitigate macOS tar bug
-        if: matrix.target == 'aarch64-apple-darwin'
-        run: |
-          sudo /usr/sbin/purge
+      # # BSD tar on macOS: first 8MB of the file are sometimes all NUL byte
+      # # refs: https://github.com/actions/cache/issues/403 , https://github.com/rust-lang/cargo/issues/8603
+      # - name: Mitigate macOS tar bug
+      #   if: matrix.target == 'aarch64-apple-darwin'
+      #   run: |
+      #     sudo /usr/sbin/purge
       
-      - name: Create archive as release asset - Linux
-        if: >
-          matrix.target != 'aarch64-apple-darwin' &&
-          matrix.target != 'x86_64-pc-windows-msvc'
-        run: |
-          cd "${{ env.JOB_WORKDIR }}"
-          tar czf "../${RELEASE_ASSET_FILENAME}" "${RELEASE_SRC_DIR}"
+      # - name: Create archive as release asset - Linux
+      #   if: >
+      #     matrix.target != 'aarch64-apple-darwin' &&
+      #     matrix.target != 'x86_64-pc-windows-msvc'
+      #   run: |
+      #     cd "${{ env.JOB_WORKDIR }}"
+      #     tar czf "../${RELEASE_ASSET_FILENAME}" "${RELEASE_SRC_DIR}"
       
-      - name: Create archive as release asset - Windows / macOS
-        if: >
-          matrix.target == 'aarch64-apple-darwin' ||
-          matrix.target == 'x86_64-pc-windows-msvc'
-        run: |
-          cd "${{ env.JOB_WORKDIR }}"
-          7z a "../${RELEASE_ASSET_FILENAME}" "${RELEASE_SRC_DIR}"
+      # - name: Create archive as release asset - Windows / macOS
+      #   if: >
+      #     matrix.target == 'aarch64-apple-darwin' ||
+      #     matrix.target == 'x86_64-pc-windows-msvc'
+      #   run: |
+      #     cd "${{ env.JOB_WORKDIR }}"
+      #     7z a "../${RELEASE_ASSET_FILENAME}" "${RELEASE_SRC_DIR}"
       
-      - name: Update release with new asset
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ github.ref_name }} ${RELEASE_ASSET_FILENAME}
+      # - name: Update release with new asset
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: gh release upload ${{ github.ref_name }} ${RELEASE_ASSET_FILENAME}
+ 
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+      - name: Install dependencies
+        run: yarn install
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Move artifacts
+        run: yarn artifacts
+      - name: List packages
+        run: ls -R ./npm
+        shell: bash
+      # - name: Publish
+      #   run: |
+      #     npm config set provenance true
+      #     if git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+$";
+      #     then
+      #       echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      #       npm publish --access public
+      #     elif git log -1 --pretty=%B | grep "^[0-9]\+\.[0-9]\+\.[0-9]\+";
+      #     then
+      #       echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+      #       npm publish --tag next --access public
+      #     else
+      #       echo "Not a release, skipping publish"
+      #     fi
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
