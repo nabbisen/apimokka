@@ -1,6 +1,29 @@
 {
-    "name": "apimokka",
-    "version": "0.7.1",
+    "name": "@apimokka/bin",
+    "version": "0.7.0",
+    "description": "Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res written in Rust.",
+    "author": "nabbisen<nabbisen@scqr.net",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nabbisen/apimokka.git"
+    },
+    "keywords": [
+        "api",
+        "mock",
+        "server",
+        "http",
+        "json",
+        "route-matching",
+        "dynamic-routing",
+        "custom-routes",
+        "gui",
+        "devtool",
+        "developer-tool",
+        "testing",
+        "stub",
+        "simulate"
+    ],
     "main": "index.js",
     "types": "index.d.ts",
     "bin": {
@@ -17,25 +40,15 @@
             ]
         }
     },
-    "license": "Apache-2.0",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/nabbisen/apimokka.git"
-    },
     "devDependencies": {
         "@napi-rs/cli": "^2.18.4",
         "ava": "^6.3.0"
-    },
-    "optionalDependencies": {
-        "apimokka-win32-x64-msvc": "*",
-        "apimokka-darwin-arm64": "*",
-        "apimokka-linux-x64-gnu": "*"
     },
     "ava": {
         "timeout": "3m"
     },
     "engines": {
-        "node": ">= 10"
+        "node": ">= 12"
     },
     "scripts": {
         "artifacts": "napi artifacts",
@@ -46,7 +59,7 @@
         "universal": "napi universal",
         "version": "napi version",
         "create-npm-dir": "napi create-npm-dir -t .",
-        "prepublishOnly": "napi prepublish -t npm",
+        "prepublishOnly": "napi prepublish --skip-gh-release",
         "postinstall": "node scripts/postinstall.js"
     }
 }

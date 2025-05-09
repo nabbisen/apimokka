@@ -23,5 +23,5 @@ $ npm install -D apimokka
 ### Run
 
 ```console
-$ npm run apimokka
+$ npm exec apimokka
 ```
