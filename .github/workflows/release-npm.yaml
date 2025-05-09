@@ -30,10 +30,10 @@ jobs:
             archive_ext: .tar.gz
             napiplatform: linux-x64-gnu
           - name: macOS-aarch64
-            target: x86_64-apple-darwin
+            target: aarch64-apple-darwin
             os: macos-latest
             archive_ext: .zip
-            napiplatform: darwin-x64
+            napiplatform: darwin-arm64
           - name: Windows-x64
             target: x86_64-pc-windows-msvc
             os: windows-latest
@@ -59,6 +59,8 @@ jobs:
       
       - name: Prepare napi
         run: cp -r napi/* .
+        # replace w/
+        # working-directory: napi
       
       - name: Install npm packages
         run: npm install
