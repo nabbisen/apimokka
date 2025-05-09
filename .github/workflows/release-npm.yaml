@@ -52,16 +52,16 @@ jobs:
           sudo apt-get install -y libx11-dev libxext-dev libxft-dev libxinerama-dev libxcursor-dev libxrender-dev libxfixes-dev libpango1.0-dev libgl1-mesa-dev libglu1-mesa-dev
       
       # [ Node.js dependencies ]
+      - name: Prepare napi
+        run: cp -r napi/* .
+        # todo: better ? to replace w/
+        # working-directory: napi
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-      
-      - name: Prepare napi
-        run: cp -r napi/* .
-        # replace w/
-        # working-directory: napi
       
       - name: Install npm packages
         run: npm run install
@@ -147,6 +147,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Prepare napi
+        run: cp -r napi/* .
+        # todo: better ? to replace w/
+        # working-directory: napi
+      
       - name: Setup node
         uses: actions/setup-node@v4
         with:
