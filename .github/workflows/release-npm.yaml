@@ -141,11 +141,19 @@ jobs:
  
   publish:
     name: Publish on release tags
-    if: startsWith(github.ref, 'refs/tags/') && github.ref_name =~ '^\\d+\\.\\d+\\.\\d+$'
     needs:
       - build
     runs-on: ubuntu-latest
     steps:
+      - name: Check if release tag
+        run: |
+          if [[ "${GITHUB_REF_NAME}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "${GITHUB_REF_NAME}: Semantic versioning tagged - OK"
+          else
+            echo "Not a release tag. Skipped."
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
 
       - name: Prepare napi
