@@ -27,7 +27,7 @@ pub fn handle() -> Window {
         Ok(x) => x,
         Err(err) => {
             let window = Window::default_fill();
-            let _frame = Frame::default_fill().with_label(err.as_str());
+            let _ = Frame::default_fill().with_label(err.as_str());
             window.end();
             return window;
         }
