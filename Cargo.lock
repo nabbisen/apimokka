@@ -76,7 +76,7 @@ dependencies = [
 
 [[package]]
 name = "apimokka"
-version = "0.7.3"
+version = "0.7.4"
 dependencies = [
  "apimock",
  "chrono",
