@@ -1,6 +1,6 @@
 # API mokka
 
-Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res written in Rust.
+[apimock-rs](https://github.com/nabbisen/apimock-rs) (API mock) based visual mocking helper to handle HTTP/JSON req/res written in Rust.
 
 [![crates.io](https://img.shields.io/crates/v/apimokka?label=latest)](https://crates.io/crates/apimokka)
 [![Documentation](https://docs.rs/apimokka/badge.svg?version=latest)](https://docs.rs/apimokka)
@@ -10,9 +10,9 @@ Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to 
 
 ## Summary
 
-Visual mocking helper to handle API mock Server generating HTTP/JSON responses written in Rust.
+Mock with mokka ☕️🌄
 
-📖 Docs around server [Configure](https://github.com/nabbisen/apimock-rs/blob/main/docs/CONFIGURE.md), and [examples](https://github.com/nabbisen/apimock-rs/blob/main/examples/config/)
+📖 Docs around server [Configure](https://github.com/nabbisen/apimock-rs/blob/main/docs/CONFIGURE.md), and [examples](https://github.com/nabbisen/apimock-rs/blob/main/examples/config/full/)
 
 ## Usage
 
@@ -43,7 +43,7 @@ npm install -D @apimockka/bin
 
 npm exec @apimokka/bin
 # in case app args passed:
-npm exec @apimokka/bin -- -c apimock.toml -p 3002 --middleware middleware.rhai
+npm exec @apimokka/bin -- -c apimock.toml -p 3002 --middleware apimock-middleware.rhai
 ```
 
 ## Development
@@ -56,4 +56,4 @@ cargo test
 
 ## Acknowledgements
 
-Depends on [apimock-rs](https://github.com/nabbisen/apimock-rs) and [fltk-rs](https://github.com/fltk-rs/fltk-rs).
+Depends on [apimock-rs](https://github.com/nabbisen/apimock-rs) and [fltk-rs](https://github.com/fltk-rs/fltk-rs). [napi-rs](https://github.com/napi-rs/napi-rs) for binding for [Node.js](https://nodejs.org/).

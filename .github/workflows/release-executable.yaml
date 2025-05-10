@@ -75,16 +75,12 @@ jobs:
           RELEASE_ASSET_BASENAME=${{ env.PRODUCT_BASENAME }}@${{ matrix.name }}-${{ env.TAG }}
           RELEASE_SRC_DIR=${RELEASE_ASSET_BASENAME}
           RELEASE_ASSET_FILENAME=${RELEASE_ASSET_BASENAME}${{ matrix.archive_ext }}
+          
           mkdir -p "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}"
+          
           mv "${BUILT_FILEPATH}" "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/"
-
-          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock.toml
-          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/middleware.rhai
-          mkdir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data"
-          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/api.json5
-          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/home.json
-          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-data/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/apimock-data/middleware-test.json
-          mkdir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/apimock-dyn-data"
+          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/default/apimock.toml
+          curl -LO --output-dir "${{ env.JOB_WORKDIR }}/${RELEASE_SRC_DIR}/" https://raw.githubusercontent.com/nabbisen/apimock-rs/refs/heads/main/examples/config/default/apimock-middleware.rhai
 
           echo "RELEASE_SRC_DIR=${RELEASE_SRC_DIR}" >> $GITHUB_ENV
           echo "RELEASE_ASSET_FILENAME=${RELEASE_ASSET_FILENAME}" >> $GITHUB_ENV

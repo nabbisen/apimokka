@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use apimock::core::{
-    args::EnvArgs, config::ConfigUrlPaths, constant::config::DEFAULT_LISTENER_PORT,
+    args::EnvArgs, config::ConfigUrlPaths, constant::config::LISTENER_DEFAULT_PORT,
 };
 use fltk::{
     group::Tabs,
@@ -27,7 +27,7 @@ pub fn handle(
     let mut tabs = Tabs::default_fill();
 
     let _ = server_tab::handle(server_rx);
-    let port = env_args.port.unwrap_or(DEFAULT_LISTENER_PORT);
+    let port = env_args.port.unwrap_or(LISTENER_DEFAULT_PORT);
     let _ = client_tab::handle(port);
 
     if let Some(config_filepath) = env_args.config_filepath.clone() {

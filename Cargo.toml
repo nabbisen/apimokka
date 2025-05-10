@@ -1,9 +1,9 @@
 [package]
 name = "apimokka"
-version = "0.7.8"
+version = "0.8.0"
 edition = "2021"
 
-description = "Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res"
+description = "API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res. Mock with mokka ☕️🌄"
 authors = ["nabbisen <nabbisen@scqr.net>"]
 license = "Apache-2.0"
 
@@ -39,8 +39,7 @@ path = "src/main.rs"
 required-features = []
 
 [dependencies]
-# todo: remove debug feature finally
-apimock = { version = "3", features = ["spawn", "debug"] }
+apimock = { version = "3", features = ["spawn"] }
 chrono = { version = "0", default-features = false, features = ["clock"] }
 fltk = { version = "1", features = ["fltk-bundled"] }
 tokio = "^1.44"
