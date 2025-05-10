@@ -4,6 +4,8 @@ Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to 
 
 Rust GUI app Binding for Node.js.
 
+📖 Server [Configure](https://github.com/nabbisen/apimock-rs/blob/main/docs/CONFIGURE.md)
+
 ## Supported platforms
 
 - `x86_64-unknown-linux-gnu`

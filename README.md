@@ -12,6 +12,8 @@ Mock with mokka ☕️🌄 API mock (apimock-rs) based visual mocking helper to 
 
 Visual mocking helper to handle API mock Server generating HTTP/JSON responses written in Rust.
 
+📖 Server [Configure](https://github.com/nabbisen/apimock-rs/blob/main/docs/CONFIGURE.md)
+
 ## Usage
 
 ### Executable
@@ -36,16 +38,17 @@ cargo install apimokka
 
 ## Binding for Node.js
 
-\* Under development \*
-
 ```sh
 npm install -D @apimockka/bin
+npm exec @apimock/bin
 ```
 
 ## Development
 
 ```sh
 cargo run
+
+cargo test
 ```
 
 ## Acknowledgements
