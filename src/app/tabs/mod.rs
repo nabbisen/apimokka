@@ -14,8 +14,8 @@ use tokio::sync::{
 
 mod client_tab;
 mod config_tab;
-mod config_url_paths_tab;
 mod middleware_tab;
+mod routing_tab;
 mod server_tab;
 
 pub fn handle(
@@ -32,7 +32,8 @@ pub fn handle(
 
     if let Some(config_filepath) = env_args.config_filepath.clone() {
         let _ = config_tab::handle(config_filepath.as_str(), restart_server_tx);
-        let _ = config_url_paths_tab::handle(config_url_paths);
+        // todo: possibly data_dyn_dir activated wo/ config file
+        let _ = routing_tab::handle(config_url_paths);
     }
 
     if let Some(middleware_filepath) = env_args.middleware_filepath.clone() {

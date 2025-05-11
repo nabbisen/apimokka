@@ -10,6 +10,8 @@ Mock with mokka ☕️🌄
 - Intutive terminal and productive tabs
 - Built as native and supports cross-platform
 
+### [Screenshot](https://github.com/nabbisen/apimokka#screenshot)
+
 ## Usage
 
 ### Install

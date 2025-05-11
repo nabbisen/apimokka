@@ -2,7 +2,7 @@ use apimock::core::config::ConfigUrlPaths;
 use fltk::{
     button::Button,
     enums::{Align, Color},
-    group::{Flex, FlexType},
+    group::{Flex, Scroll},
     output::Output,
     prelude::{GroupExt, InputExt, WidgetBase, WidgetExt},
 };
@@ -14,11 +14,12 @@ use crate::app::{
 
 /// entry point
 pub fn handle(config_url_paths: Option<ConfigUrlPaths>) -> Flex {
-    let tab = Flex::default_fill().with_label("URL Paths\t\t").row();
+    let tab = Flex::default_fill().with_label("Routing\t\t").row();
 
-    let mut vflex = Flex::default_fill();
+    let scroll = Scroll::default_fill();
+
+    let mut vflex = Flex::default_fill().column();
     vflex.set_spacing(FLEX_SPACING);
-    vflex.set_type(FlexType::Column);
 
     // let mut selected_content = Output::default().with_size(500, 200);
     // let selected_content_ref = Rc::from(RefCell::from(selected_content.clone()));
@@ -36,7 +37,7 @@ pub fn handle(config_url_paths: Option<ConfigUrlPaths>) -> Flex {
         let x = config_url_paths.get_key_value(key);
         match x {
             Some((k, v)) => {
-                let mut row = Flex::default_fill();
+                let mut row = Flex::default_fill().row();
                 row.set_align(Align::Left | Align::Inside);
                 row.set_spacing(FLEX_SPACING);
 
@@ -85,6 +86,7 @@ pub fn handle(config_url_paths: Option<ConfigUrlPaths>) -> Flex {
 
     // vflex.fixed(&flex, BUTTON_HEIGHT);
     vflex.end();
+    scroll.end();
     tab.end();
 
     tab
