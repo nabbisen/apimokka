@@ -1,6 +1,6 @@
 [package]
 name = "apimokka"
-version = "0.8.0"
+version = "0.8.1"
 edition = "2021"
 
 description = "API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res. Mock with mokka ☕️🌄"

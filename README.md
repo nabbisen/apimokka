@@ -14,6 +14,12 @@ Mock with mokka ☕️🌄
 
 📖 Docs around server [Configure](https://github.com/nabbisen/apimock-rs/blob/main/docs/CONFIGURE.md), and [examples](https://github.com/nabbisen/apimock-rs/blob/main/examples/config/full/)
 
+### Features
+
+- GUI but lightweight as feather
+- Intutive terminal and productive tabs
+- Built as native and supports cross-platform
+
 ## Usage
 
 ### Executable
@@ -22,9 +28,12 @@ Mock with mokka ☕️🌄
 
 ```sh
 ./apimokka
+
+# at startup, option to generate app default config and middleware files is available:
+./apimokka --init
 ```
 
-There are an example config file and directories by default.
+Asset includes default config file as an example.
 
 ### `cargo` install
 
@@ -36,15 +45,9 @@ cargo install apimokka
 
 ![screenshot.png](screenshot.png)
 
-## Binding for Node.js
+## [Binding for Node.js](napi/README.md)
 
-```sh
-npm install -D @apimockka/bin
-
-npm exec @apimokka/bin
-# in case app args passed:
-npm exec @apimokka/bin -- -c apimock.toml -p 3002 --middleware apimock-middleware.rhai
-```
+Cross-platform supporting packages are available via `npm install`.
 
 ## Development
 
@@ -56,4 +59,4 @@ cargo test
 
 ## Acknowledgements
 
-Depends on [apimock-rs](https://github.com/nabbisen/apimock-rs) and [fltk-rs](https://github.com/fltk-rs/fltk-rs). [napi-rs](https://github.com/napi-rs/napi-rs) for binding for [Node.js](https://nodejs.org/).
+Depends on [apimock-rs](https://github.com/nabbisen/apimock-rs) and [FLTK](https://www.fltk.org/) / [fltk-rs](https://github.com/fltk-rs/fltk-rs). [napi-rs](https://github.com/napi-rs/napi-rs) for binding for [Node.js](https://nodejs.org/).

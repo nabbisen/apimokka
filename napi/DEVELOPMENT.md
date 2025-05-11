@@ -17,3 +17,9 @@ $ npm update # update package-lock.json
 ```console
 $ npm version 0.0.0 # next version
 ```
+
+## Supported platforms
+
+### napi
+
+Default replacing darwin x64 with arm64 (ref: https://napi.rs/docs/cli/napi-config )
