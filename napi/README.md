@@ -1,5 +1,14 @@
 # API mokka
 
+## 🛠️ App overhaul announcement
+
+### ⚠️ Major update in development (apimock-rs, the core lib, v4)
+
+apimock-rs, the core lib, v4 introduces a fundamental shift in design. Existing configuration files will no longer work as-is. Some features will be deprecated.
+In return: cleaner configs, dynamic resolution, and better extensibility.
+
+## Summary
+
 [apimock-rs](https://github.com/nabbisen/apimock-rs) (API mock) based visual mocking helper to handle HTTP/JSON req/res written in Rust. Rust GUI app Binding for Node.js.
 
 Mock with mokka ☕️🌄

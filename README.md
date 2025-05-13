@@ -8,6 +8,13 @@
 [![Releases Workflow](https://github.com/nabbisen/apimokka/actions/workflows/release-executable.yaml/badge.svg)](https://github.com/nabbisen/apimokka/actions/workflows/release-executable.yaml)
 [![License](https://img.shields.io/github/license/nabbisen/apimokka)](https://github.com/nabbisen/apimokka/blob/main/LICENSE)
 
+## 🛠️ App overhaul announcement
+
+### ⚠️ Major update in development (apimock-rs, the core lib, v4)
+
+apimock-rs, the core lib, v4 introduces a fundamental shift in design. Existing configuration files will no longer work as-is. Some features will be deprecated.
+In return: cleaner configs, dynamic resolution, and better extensibility.
+
 ## Summary
 
 Mock with mokka ☕️🌄
