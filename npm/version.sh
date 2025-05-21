@@ -33,3 +33,25 @@ fi
 for dir in */; do
   [ -f "$dir/package.json" ] && update_package_json "$dir/package.json"
 done
+
+# (4) Cargo.toml を同期
+update_cargo_toml() {
+  FILE="$1"
+  echo "Updating $FILE to version $VERSION"
+
+  # version = "..." を書き換える（[package] セクション内に限る）
+  awk -v ver="$VERSION" '
+    BEGIN { in_package = 0 }
+    /^\[package\]/ { in_package = 1; print; next }
+    /^\[/ && !/^\[package\]/ { in_package = 0; print; next }
+    in_package && /^version[ \t]*=/ {
+      print "version = \"" ver "\""
+      next
+    }
+    { print }
+  ' "$FILE" > "$FILE.tmp" && mv "$FILE.tmp" "$FILE"
+}
+
+if [ -f ../Cargo.toml ]; then
+  update_cargo_toml ../Cargo.toml
+fi
