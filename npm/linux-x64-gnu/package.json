@@ -1,0 +1,36 @@
+{
+    "name": "@apimokka/linux-x64-gnu",
+    "version": "4.0.0-rc.12",
+    "os": [
+        "linux"
+    ],
+    "cpu": [
+        "x64"
+    ],
+    "files": [
+        "apimock"
+    ],
+    "description": "API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res written in Rust. Mock with mokka ☕️🌄",
+    "author": "nabbisen<nabbisen@scqr.net>",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nabbisen/apimokka.git"
+    },
+    "keywords": [
+        "api",
+        "mock",
+        "server",
+        "http",
+        "json",
+        "route-matching",
+        "dynamic-routing",
+        "custom-routes",
+        "gui",
+        "devtool",
+        "developer-tool",
+        "testing",
+        "stub",
+        "simulate"
+    ]
+}

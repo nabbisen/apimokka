@@ -1,0 +1,41 @@
+{
+    "name": "apimokka",
+    "version": "0.8.3",
+    "description": "API mock (apimock-rs) based visual mocking helper to handle HTTP/JSON req/res written in Rust. Mock with mokka ☕️🌄",
+    "author": "nabbisen<nabbisen@scqr.net>",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/nabbisen/apimokka.git"
+    },
+    "bin": {
+        "apimock": "./index.js"
+    },
+    "files": [
+        "postinstall.js"
+    ],
+    "scripts": {
+        "postinstall": "node postinstall.js"
+    },
+    "optionalDependencies": {
+        "@apimokka/linux-x64-gnu": "0.8.3",
+        "@apimokka/darwin-arm64": "4.0.0-rc.12",
+        "@apimokka/win32-x64-msvc": "4.0.0-rc.12"
+    },
+    "keywords": [
+        "api",
+        "mock",
+        "server",
+        "http",
+        "json",
+        "route-matching",
+        "dynamic-routing",
+        "custom-routes",
+        "gui",
+        "devtool",
+        "developer-tool",
+        "testing",
+        "stub",
+        "simulate"
+    ]
+}
