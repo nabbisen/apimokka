@@ -1,5 +1,5 @@
 {
-  "name": "@apimokka/darwin-arm64",
+  "name": "@apimokka/bin-darwin-arm64",
   "version": "0.9.0",
   "os": [
     "darwin"
